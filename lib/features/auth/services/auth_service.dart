@@ -23,12 +23,13 @@ class AuthService {
 
   Future<void> register(String name, String email, String password) async {
     try {
-      // The API doesn't reject duplicate emails, so check first.
-      final check = await _dio.post(
-        ApiConstants.isEmailAvailable,
-        data: {'email': email},
+      // The API doesn't reject duplicate emails and users/is-available
+      // always returns false, so check the users list.
+      final users = await _dio.get(ApiConstants.register);
+      final exists = (users.data as List).any(
+        (u) => u['email'].toString().toLowerCase() == email.toLowerCase(),
       );
-      if (check.data['isAvailable'] != true) {
+      if (exists) {
         throw 'This email is already registered';
       }
       await _dio.post(

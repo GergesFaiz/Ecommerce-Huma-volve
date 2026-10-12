@@ -3,6 +3,7 @@ import '../../../core/dummy_data.dart';
 import '../../../core/theme.dart';
 import '../widgets/profile_menu_item.dart';
 import '../../auth/login/screens/login_screen.dart';
+import '../../auth/services/auth_service.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -99,6 +100,7 @@ class ProfileScreen extends StatelessWidget {
                     title: 'Logout',
                     isDestructive: true,
                     onTap: () {
+                      AuthService().logout();
                       Navigator.pushReplacement(
                         context,
                         PageRouteBuilder(

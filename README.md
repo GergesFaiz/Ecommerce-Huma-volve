@@ -7,7 +7,7 @@ authentication, categories and products.
 ## Demo
 
 | Feature | Video |
-| --- | --- |
+
 | Auth (login / sign up) 
 
 https://github.com/user-attachments/assets/56c02236-6052-4bdb-8f1d-635882c91070

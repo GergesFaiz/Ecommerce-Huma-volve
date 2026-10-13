@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
+import '../errors/exceptions.dart';
+import '../storage/token_storage.dart';
 import 'api_constants.dart';
 
 class DioClient {
-  DioClient._();
-  static final instance = DioClient._();
+  final TokenStorage _tokenStorage;
 
-  String? token;
+  DioClient(this._tokenStorage);
 
   late final Dio dio = Dio(
     BaseOptions(
@@ -18,7 +19,8 @@ class DioClient {
     ),
   )..interceptors.addAll([
     InterceptorsWrapper(
-      onRequest: (options, handler) {
+      onRequest: (options, handler) async {
+        final token = await _readToken();
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
         }
@@ -27,4 +29,12 @@ class DioClient {
     ),
     PrettyDioLogger(requestBody: true),
   ]);
+
+  Future<String?> _readToken() async {
+    try {
+      return await _tokenStorage.getAccessToken();
+    } on CacheException {
+      return null;
+    }
+  }
 }

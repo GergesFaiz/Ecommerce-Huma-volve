@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../features/home/models/product.dart';
+import '../features/home/domain/entities/product.dart';
 
 final dummyProducts = [
   Product(

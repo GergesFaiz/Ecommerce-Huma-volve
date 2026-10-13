@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../home/models/product.dart';
+import '../../home/domain/entities/product.dart';
 import '../../../core/theme.dart';
 import '../widgets/color_selector.dart';
 import '../widgets/size_selector.dart';

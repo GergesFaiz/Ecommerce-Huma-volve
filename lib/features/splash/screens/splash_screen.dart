@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../../core/di/injection_container.dart';
 import '../../../core/theme.dart';
-import '../../auth/login/screens/login_screen.dart';
+import '../../auth/domain/usecases/is_logged_in_usecase.dart';
+import '../../auth/presentation/screens/login_screen.dart';
+import '../../main_navigation/screens/main_navigation_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,12 +20,17 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _navigateToNext() async {
+    // Skip login when a token is already cached.
+    final isLoggedIn = sl<IsLoggedInUseCase>()();
     await Future.delayed(const Duration(seconds: 2));
+    final Widget next = await isLoggedIn
+        ? const MainNavigationScreen()
+        : const LoginScreen();
     if (mounted) {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => const LoginScreen(),
+          pageBuilder: (context, animation, secondaryAnimation) => next,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(opacity: animation, child: child);
           },

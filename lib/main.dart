@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'core/di/injection_container.dart';
 import 'core/theme.dart';
 import 'features/splash/screens/splash_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  initDependencies();
   runApp(const MyApp());
 }
 

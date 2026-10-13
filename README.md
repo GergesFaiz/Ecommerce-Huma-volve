@@ -8,8 +8,13 @@ authentication, categories and products.
 
 | Feature | Video |
 | --- | --- |
-| Auth (login / sign up) | [auth_feature.mp4](docs/videos/auth_feature.mp4) |
-| Home (products and categories from the API) | [home_feature.mp4](docs/videos/home_feature.mp4) |
+| Auth (login / sign up) 
+
+https://github.com/user-attachments/assets/56c02236-6052-4bdb-8f1d-635882c91070
+
+| Home (products and categories from the API) 
+
+https://github.com/user-attachments/assets/42c880ef-a7fc-4201-8164-d7c39b761be9
 
 ## Features
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/dummy_data.dart';
 import '../../../core/theme.dart';
+import '../../../core/widgets/app_network_image.dart';
 
 class CartItemCard extends StatelessWidget {
   final CartItem cartItem;
@@ -28,7 +29,7 @@ class CartItemCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: Image.network(
+            child: AppNetworkImage(
               cartItem.product.imageUrl,
               width: 90,
               height: 90,

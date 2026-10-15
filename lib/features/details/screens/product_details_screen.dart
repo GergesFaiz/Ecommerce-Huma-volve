@@ -4,6 +4,7 @@ import '../../../core/theme.dart';
 import '../widgets/color_selector.dart';
 import '../widgets/size_selector.dart';
 import '../../../core/widgets/primary_button.dart';
+import '../../../core/widgets/app_network_image.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final Product product;
@@ -63,9 +64,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
                 tag: 'product-${widget.product.id}',
-                child: Image.network(
+                child: AppNetworkImage(
                   widget.product.imageUrl,
-                  fit: BoxFit.cover,
                 ),
               ),
             ),

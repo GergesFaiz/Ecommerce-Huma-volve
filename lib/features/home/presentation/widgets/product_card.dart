@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/product.dart';
 import '../../../../core/theme.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../../details/screens/product_details_screen.dart';
 
 class ProductCard extends StatelessWidget {
@@ -51,9 +52,8 @@ class ProductCard extends StatelessWidget {
                       borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(24),
                       ),
-                      child: Image.network(
-                        product.imageUrl,
-                        fit: BoxFit.cover,
+                      child: AppNetworkImage(
+                        url: product.imageUrl,
                         width: double.infinity,
                         height: double.infinity,
                       ),

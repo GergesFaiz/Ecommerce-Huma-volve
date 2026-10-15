@@ -31,34 +31,47 @@ class HomeView extends StatelessWidget {
       body: SafeArea(
         child: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
-            return CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(child: _buildHeader(context, state)),
-                if (state is HomeLoaded)
-                  _buildProducts(state)
-                else if (state is HomeError)
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(state.message),
-                        const SizedBox(height: 12),
-                        TextButton(
-                          onPressed: () =>
-                              context.read<HomeCubit>().getHomeData(),
-                          child: const Text('Try again'),
-                        ),
-                      ],
+            return NotificationListener<ScrollNotification>(
+              onNotification: (notification) {
+                // fetch the next page a bit before reaching the bottom
+                if (notification.metrics.axis == Axis.vertical &&
+                    notification.metrics.extentAfter < 300) {
+                  context.read<HomeCubit>().loadMoreProducts();
+                }
+                return false;
+              },
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(child: _buildHeader(context, state)),
+                  if (state is HomeLoaded) ...[
+                    _buildProducts(state),
+                    SliverToBoxAdapter(
+                      child: _buildLoadMoreFooter(context, state),
                     ),
-                  )
-                else
-                  const SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-                const SliverToBoxAdapter(child: SizedBox(height: 24)),
-              ],
+                  ] else if (state is HomeError)
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(state.message),
+                          const SizedBox(height: 12),
+                          TextButton(
+                            onPressed: () =>
+                                context.read<HomeCubit>().getHomeData(),
+                            child: const Text('Try again'),
+                          ),
+                        ],
+                      ),
+                    )
+                  else
+                    const SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                  const SliverToBoxAdapter(child: SizedBox(height: 24)),
+                ],
+              ),
             );
           },
         ),
@@ -93,6 +106,43 @@ class HomeView extends StatelessWidget {
         }, childCount: state.products.length),
       ),
     );
+  }
+
+  Widget _buildLoadMoreFooter(BuildContext context, HomeLoaded state) {
+    if (state.isLoadingProducts) return const SizedBox.shrink();
+    if (state.isLoadingMore) {
+      return const Padding(
+        padding: EdgeInsets.only(top: 24),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+    if (state.loadMoreError != null) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 16),
+        child: Column(
+          children: [
+            Text(state.loadMoreError!),
+            TextButton(
+              onPressed: () =>
+                  context.read<HomeCubit>().loadMoreProducts(retry: true),
+              child: const Text('Try again'),
+            ),
+          ],
+        ),
+      );
+    }
+    if (state.hasReachedEnd && state.products.isNotEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 24),
+        child: Center(
+          child: Text(
+            "You've reached the end",
+            style: TextStyle(color: Colors.grey.shade500),
+          ),
+        ),
+      );
+    }
+    return const SizedBox.shrink();
   }
 
   Widget _buildHeader(BuildContext context, HomeState state) {

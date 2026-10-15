@@ -22,9 +22,19 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<Either<Failure, List<Product>>> getProducts({int? categoryId}) async {
+  Future<Either<Failure, List<Product>>> getProducts({
+    int? categoryId,
+    required int offset,
+    required int limit,
+  }) async {
     try {
-      return Right(await _remoteDataSource.getProducts(categoryId: categoryId));
+      return Right(
+        await _remoteDataSource.getProducts(
+          categoryId: categoryId,
+          offset: offset,
+          limit: limit,
+        ),
+      );
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     }

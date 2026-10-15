@@ -9,7 +9,16 @@ class GetProductsUseCase {
 
   GetProductsUseCase(this._repository);
 
-  // null means "All"
-  Future<Either<Failure, List<Product>>> call({int? categoryId}) =>
-      _repository.getProducts(categoryId: categoryId);
+  // categoryId null means "All", page starts at 0
+  Future<Either<Failure, List<Product>>> call({
+    int? categoryId,
+    int page = 0,
+    int pageSize = pageSizeDefault,
+  }) => _repository.getProducts(
+    categoryId: categoryId,
+    offset: page * pageSize,
+    limit: pageSize,
+  );
+
+  static const pageSizeDefault = 10;
 }

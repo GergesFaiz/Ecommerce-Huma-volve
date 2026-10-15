@@ -117,10 +117,23 @@ class FakeHomeRepository implements HomeRepository {
       ? Left(categoriesFailure!)
       : const Right(tCategories);
 
+  final List<int> requestedOffsets = [];
+
+  // total products available per request; null returns a single product
+  int? totalProducts;
+
   @override
-  Future<Either<Failure, List<Product>>> getProducts({int? categoryId}) async {
+  Future<Either<Failure, List<Product>>> getProducts({
+    int? categoryId,
+    required int offset,
+    required int limit,
+  }) async {
     requestedCategoryIds.add(categoryId);
+    requestedOffsets.add(offset);
     if (productsFailure != null) return Left(productsFailure!);
-    return Right([tProduct('${categoryId ?? 'all'}')]);
+    final prefix = '${categoryId ?? 'all'}';
+    if (totalProducts == null) return Right([tProduct(prefix)]);
+    final end = (offset + limit).clamp(0, totalProducts!);
+    return Right([for (var i = offset; i < end; i++) tProduct('$prefix-$i')]);
   }
 }

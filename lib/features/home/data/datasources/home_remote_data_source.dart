@@ -7,7 +7,11 @@ import '../models/product_model.dart';
 
 abstract class HomeRemoteDataSource {
   Future<List<CategoryModel>> getCategories();
-  Future<List<ProductModel>> getProducts({int? categoryId});
+  Future<List<ProductModel>> getProducts({
+    int? categoryId,
+    required int offset,
+    required int limit,
+  });
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
@@ -26,11 +30,19 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<List<ProductModel>> getProducts({int? categoryId}) async {
+  Future<List<ProductModel>> getProducts({
+    int? categoryId,
+    required int offset,
+    required int limit,
+  }) async {
     try {
       final res = await _dio.get(
         ApiConstants.products,
-        queryParameters: {if (categoryId != null) 'categoryId': categoryId},
+        queryParameters: {
+          'offset': offset,
+          'limit': limit,
+          if (categoryId != null) 'categoryId': categoryId,
+        },
       );
       return (res.data as List).map((e) => ProductModel.fromJson(e)).toList();
     } on DioException catch (e) {

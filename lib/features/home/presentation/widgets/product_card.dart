@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../domain/entities/product.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/app_network_image.dart';
-import '../../../details/screens/product_details_screen.dart';
+import '../../../../core/routes/app_routes.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -12,20 +13,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          PageRouteBuilder(
-            transitionDuration: const Duration(milliseconds: 500),
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                ProductDetailsScreen(product: product),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
-          ),
-        );
-      },
+      onTap: () => context.push(AppRoutes.product(product.id), extra: product),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,

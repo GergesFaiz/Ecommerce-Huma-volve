@@ -4,4 +4,5 @@ class ApiConstants {
   static const register = 'users/';
   static const categories = 'categories';
   static const products = 'products';
+  static String productById(String id) => 'products/$id';
 }

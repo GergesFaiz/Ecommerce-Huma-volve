@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/di/injection_container.dart';
 import '../../../core/theme.dart';
 import '../../auth/domain/usecases/is_logged_in_usecase.dart';
-import '../../auth/presentation/screens/login_screen.dart';
-import '../../main_navigation/screens/main_navigation_screen.dart';
+import '../../../core/routes/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,20 +23,8 @@ class _SplashScreenState extends State<SplashScreen> {
     // Skip login when a token is already cached.
     final isLoggedIn = sl<IsLoggedInUseCase>()();
     await Future.delayed(const Duration(seconds: 2));
-    final Widget next = await isLoggedIn
-        ? const MainNavigationScreen()
-        : const LoginScreen();
-    if (mounted) {
-      Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => next,
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(opacity: animation, child: child);
-          },
-        ),
-      );
-    }
+    final next = await isLoggedIn ? AppRoutes.home : AppRoutes.login;
+    if (mounted) context.go(next);
   }
 
   @override
@@ -47,11 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.shopping_bag,
-              size: 120,
-              color: AppTheme.primary,
-            ),
+            Icon(Icons.shopping_bag, size: 120, color: AppTheme.primary),
             const SizedBox(height: 24),
             Text(
               'Huma-volve',
@@ -69,9 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
             const SizedBox(height: 48),
-            CircularProgressIndicator(
-              color: AppTheme.primary,
-            ),
+            CircularProgressIndicator(color: AppTheme.primary),
           ],
         ),
       ),

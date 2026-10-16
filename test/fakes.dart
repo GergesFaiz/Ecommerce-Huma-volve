@@ -6,6 +6,7 @@ import 'package:ecommerce_app_huma_volve/features/auth/data/datasources/auth_rem
 import 'package:ecommerce_app_huma_volve/features/auth/data/models/auth_tokens_model.dart';
 import 'package:ecommerce_app_huma_volve/features/auth/domain/entities/auth_tokens.dart';
 import 'package:ecommerce_app_huma_volve/features/auth/domain/repositories/auth_repository.dart';
+import 'package:ecommerce_app_huma_volve/features/details/domain/repositories/product_details_repository.dart';
 import 'package:ecommerce_app_huma_volve/features/home/domain/entities/category_entity.dart';
 import 'package:ecommerce_app_huma_volve/features/home/domain/entities/product.dart';
 import 'package:ecommerce_app_huma_volve/features/home/domain/repositories/home_repository.dart';
@@ -135,5 +136,16 @@ class FakeHomeRepository implements HomeRepository {
     if (totalProducts == null) return Right([tProduct(prefix)]);
     final end = (offset + limit).clamp(0, totalProducts!);
     return Right([for (var i = offset; i < end; i++) tProduct('$prefix-$i')]);
+  }
+}
+
+class FakeProductDetailsRepository implements ProductDetailsRepository {
+  Failure? failure;
+  final List<String> requestedIds = [];
+
+  @override
+  Future<Either<Failure, Product>> getProductById(String id) async {
+    requestedIds.add(id);
+    return failure != null ? Left(failure!) : Right(tProduct(id));
   }
 }

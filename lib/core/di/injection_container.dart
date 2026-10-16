@@ -11,6 +11,11 @@ import '../../features/auth/domain/usecases/logout_usecase.dart';
 import '../../features/auth/domain/usecases/register_usecase.dart';
 import '../../features/auth/presentation/cubit/login_cubit.dart';
 import '../../features/auth/presentation/cubit/sign_up_cubit.dart';
+import '../../features/details/data/datasources/product_details_remote_data_source.dart';
+import '../../features/details/data/repositories/product_details_repository_impl.dart';
+import '../../features/details/domain/repositories/product_details_repository.dart';
+import '../../features/details/domain/usecases/get_product_details_usecase.dart';
+import '../../features/details/presentation/cubit/product_details_cubit.dart';
 import '../../features/home/data/datasources/home_remote_data_source.dart';
 import '../../features/home/data/repositories/home_repository_impl.dart';
 import '../../features/home/domain/repositories/home_repository.dart';
@@ -51,4 +56,14 @@ void initDependencies() {
   sl.registerLazySingleton(() => GetCategoriesUseCase(sl()));
   sl.registerLazySingleton(() => GetProductsUseCase(sl()));
   sl.registerFactory(() => HomeCubit(sl(), sl()));
+
+  // Product details
+  sl.registerLazySingleton<ProductDetailsRemoteDataSource>(
+    () => ProductDetailsRemoteDataSourceImpl(sl()),
+  );
+  sl.registerLazySingleton<ProductDetailsRepository>(
+    () => ProductDetailsRepositoryImpl(sl()),
+  );
+  sl.registerLazySingleton(() => GetProductDetailsUseCase(sl()));
+  sl.registerFactory(() => ProductDetailsCubit(sl()));
 }

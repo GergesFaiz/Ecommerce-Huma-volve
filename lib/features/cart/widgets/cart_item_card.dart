@@ -30,9 +30,10 @@ class CartItemCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: AppNetworkImage(
-              url: cartItem.product.imageUrl,
+              cartItem.product.imageUrl,
               width: 90,
               height: 90,
+              fit: BoxFit.cover,
             ),
           ),
           const SizedBox(width: 16),

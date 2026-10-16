@@ -64,7 +64,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
                 tag: 'product-${widget.product.id}',
-                child: AppNetworkImage(url: widget.product.imageUrl),
+                child: AppNetworkImage(
+                  widget.product.imageUrl,
+                ),
               ),
             ),
           ),
